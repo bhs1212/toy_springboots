@@ -18,11 +18,9 @@ public class UserListService {
     AttachFileService attachFileService;
 
     public Object getOneWithAttachFiles(Object dataMap){
-        // Attach files ArrayList<Map>
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("attachFiles", attachFileService.getList(dataMap));
 
-        // 기존 값 보존 위해 사용
         result.putAll((Map<String, Object>)this.getOne(dataMap));
         return result;
     }
@@ -34,7 +32,6 @@ public class UserListService {
     }
     
     public Object insertWithFilesAndGetList(Object dataMap){
-        // insert files
         Object result = attachFileService.insertMulti(dataMap);
         result = this.insertOne(dataMap);
         result = this.getList(dataMap);
