@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserList">
+    <!-- call  -->
+    <select id="selectListByUID" 
+        parameterType="Map" resultType="Map">
+        SELECT * 
+        FROM SURVEYOR
+    </select>
+
+    <!-- call UserList.selectByUID -->
+    <select id="selectByUID" 
+        parameterType="Map" resultType="Map">
+        SELECT * 
+        FROM SURVEYOR
+        WHERE USER_ID = #{USER_ID}
+    </select>
+
+    <!-- call UserList.selectTotal -->
+    <select id="selectTotal" 
+        parameterType="Map" resultType="int">
+        SELECT count(*) as cnt
+        FROM CIP_COMMON_CODE
+    </select>
+
+    <!-- call UserList.updateByUID -->
+    <update id="updateByUID" parameterType="Map">
+        UPDATE CIP_COMMON_CODE 
+        SET NAME = #{NAME}, 
+            MODIFY_DATE = sysdate()
+        WHERE COMMON_CODE_ID = #{COMMON_CODE_ID}
+    </update>
+
+    <!-- call UserList.deleteByUID -->
+    <delete id="deleteByUID" parameterType="Map">
+        DELETE FROM CIP_COMMON_CODE
+        WHERE COMMON_CODE_ID = #{COMMON_CODE_ID}
+    </delete>
+
+    <!-- call UserList.deleteMultiByUIDs -->
+    <delete id="deleteMultiByUIDs" parameterType="Map">
+        DELETE FROM CIP_COMMON_CODE
+        WHERE COMMON_CODE_ID IN 
+            <foreach collection="deleteMultis" item="item" 
+                open="(" separator="," close=")">
+                #{item}
+            <!-- 'No', 'System_Code_YN' -->
+            </foreach>
+    </delete>
+
+    <!-- call UserList.insertWithUID -->
+    <insert id="insertWithUID" parameterType="Map">
+    insert into CIP_COMMON_CODE 
+        (COMMON_CODE_ID,NAME,ORDER_NUMBER,ATTRIBUTION_1,ATTRIBUTION_2,DESCRIPTION,
+        SYSTEM_CODE_YN,USE_YN,PARENT_COMMON_CODE_ID,REGISTER_SEQ,REGISTRY_DATE,MODIFIER_SEQ,MODIFY_DATE) 
+    VALUE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    #{COMMON_CODE_ID},#{NAME},#{ORDER_NUMBER},NULL,NULL,#{DESCRIPTION}
+        <choose>
+            <when test="SYSTEM_CODE_YN != null">
+                , 'Yes'
+            </when>
+            <otherwise>
+                ,'No'
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="USE_YN != null">
+                , 'Yes'
+            </when>
+            <otherwise>
+                ,'No'
+            </otherwise>
+        </choose>
+        ,NULL,#{REGISTER_SEQ},sysdate(),sysdate(),
+        <if test="MODIFIER_SEQ != null">
+        #{MODIFIER_SEQ},
+        </if>
+        </trim>
+    </insert>
+</mapper>
