@@ -36,7 +36,7 @@ public class MainController {
     @Autowired
     CommonUtils commonUtils;
 
-    @RequestMapping(value = {"/main", "/", ""}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/main"}, method = RequestMethod.GET)
     public ModelAndView main(ModelAndView modelAndView) {
         modelAndView.setViewName("main");
         return modelAndView;

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SecurityMainController {
-    @GetMapping({"/login"})
+    @GetMapping({"/"})
     public ModelAndView main(ModelAndView modelAndView){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -23,14 +23,7 @@ public class SecurityMainController {
         } else {
             String username = principal.toString();
         }
-        String viewName = "/WEB-INF/views/security/main.jsp";
-        modelAndView.setViewName(viewName);
-        return modelAndView;
-    }
-
-    @GetMapping({"/admin"})
-    public ModelAndView admin(ModelAndView modelAndView){
-        String viewName = "/WEB-INF/views/security/admin.jsp";
+        String viewName = "/security/main";
         modelAndView.setViewName(viewName);
         return modelAndView;
     }
